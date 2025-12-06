@@ -9,3 +9,5 @@ Unlike traditional systems that rely on separate stations for gripping and screw
 MATLAB is used for kinematic analysis, motion planning, and performance evaluation of the robotic arm to validate the coordination between the gripping and fastening actions. This modeling approach ensures the system operates within safe torque, position, and timing parameters before deployment.
 
 Expected outcomes include reduced assembly time, enhanced accuracy, and improved ergonomics by removing repetitive manual labor from operators. By integrating a dual-function robotic end-effector for manipulation and screw-driving tasks, this project offers a flexible and scalable solution for modern automated manufacturing.
+
+<h2> INTRODUCTION TO ROBOTICS TUTORIAL </h2>
