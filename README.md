@@ -1,0 +1,10 @@
+<h1>Introduction to Robotics</h1>
+Este proyecto aborda las limitaciones de los procesos de ensamblaje manual y la carga de trabajo física que soportan los operarios mediante el desarrollo de un brazo robótico capaz de manipular componentes mediante una boquilla de vacío y sujetarlos con un destornillador integrado. La solución propuesta automatiza las tareas repetitivas de recogida y colocación y atornillado para mejorar la productividad, la consistencia y la seguridad en entornos de fabricación.
+
+El objetivo principal es garantizar la manipulación y sujeción fiables de piezas de geometría y tamaño variables. El brazo robótico combina dos herramientas: una boquilla de vacío para sujetar los componentes y una cabeza de destornillador para una sujeción segura, ambas montadas en el mismo efector final. Esta configuración integrada minimiza el tiempo de cambio de herramienta, reduce la duración del ciclo y aumenta significativamente la eficiencia del flujo de trabajo de ensamblaje.
+
+A diferencia de los sistemas tradicionales que utilizan estaciones separadas para sujetar y atornillar, este diseño permite un funcionamiento continuo utilizando un único efector final multiuso. El robot puede recoger la pieza, posicionarla con precisión y realizar la operación de sujeción sin necesidad de fijaciones externas ni dispositivos adicionales, lo que hace que el sistema sea más compacto y adaptable.
+
+MATLAB se utiliza para el análisis cinemático, la planificación del movimiento y la evaluación del rendimiento del brazo robótico para validar la coordinación entre las acciones de agarre y sujeción. Este enfoque de modelado garantiza que el sistema funcione dentro de parámetros seguros de par, posición y tiempo antes de su despliegue.
+
+Los resultados esperados incluyen una reducción del tiempo de ensamblaje, una mayor precisión y una ergonomía optimizada al eliminar el trabajo manual repetitivo de los operadores. Al integrar un efector final robótico de doble función para tareas de manipulación y atornillado, este proyecto ofrece una solución flexible y escalable para la fabricación automatizada moderna.
