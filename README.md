@@ -14,4 +14,6 @@ Expected outcomes include reduced assembly time, enhanced accuracy, and improved
 In this project, a series of three practical tasks were carried out in the Epson Lab, each designed to explore different aspects of robotic manipulation. All tasks utilize an I/O Box for robot control, and Task 3 incorporates custom-designed tools fabricated with a 3D printer.
 
 For detailed information on the programming, electrical connections, and the manufactured components used in these tasks, please refer to the link provided in the title: "Introduction to Robotics Tutorial".
-## TASK 1
+#TASK 1: PICK AND PLACE
+
+
