@@ -1,4 +1,4 @@
-<h1><span style="color:red; text-decoration:underline;">INTRODUCTION TO ROBOTICS</span></h1>
+<h1> INTRODUCTION TO ROBOTICS </h1>
 
 This project addresses the limitations of manual assembly processes and the physical workload placed on operators by developing a robotic arm capable of handling components using a vacuum nozzle and fastening them with an integrated screwdriver tool. The proposed solution automates repetitive pick-and-place and screw-driving tasks to improve productivity, consistency, and safety in manufacturing environments.
 
