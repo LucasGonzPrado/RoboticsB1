@@ -14,6 +14,25 @@ Expected outcomes include reduced assembly time, enhanced accuracy, and improved
 In this project, a series of three practical tasks were carried out in the Epson Lab, each designed to explore different aspects of robotic manipulation. All tasks utilize an I/O Box for robot control, and Task 3 incorporates custom-designed tools fabricated with a 3D printer.
 
 For detailed information on the programming, electrical connections, and the manufactured components used in these tasks, please refer to the link provided in the title: "Introduction to Robotics Tutorial".
-#TASK 1: PICK AND PLACE
+
+Task 1: Pick and Place
+The objective of this task is to demonstrate the robot's ability to handle multiple objects with precision and efficiency. The robot is required to pick three tokens and three blocks from a feeder and place them into designated positions on a tray. The process involves several steps:
+
+Picking: The robot retrieves tokens and blocks from the feeder within its workspace, using its vacuum nozzle to securely lift each object.
+
+Alignment: After each pick, the robot moves the object to an alignment plate, ensuring that it is correctly positioned and oriented for precise placement.
+
+Placement: Once properly aligned, the robot deposits the token or block into its assigned location on the tray.
+
+This task emphasizes accuracy, careful object handling, and the ability to manage multiple object types in a systematic sequence.
+
+Task 2: Stacking
+In this task, the robot demonstrates its capability to construct stable stacks by alternating between tokens and blocks on a platform within its workspace. The task involves:
+
+Collecting: Using the vacuum nozzle, the robot picks up tokens and blocks from the feeder, preparing them for stacking.
+
+Stacking: The robot alternates between tokens and blocks (e.g., token-block-token-block) to create a stable and organized stack on the designated platform.
+
+This task highlights the robot’s ability to maintain balance, precision, and spatial awareness while performing sequential stacking operations, which is critical in automated assembly or material handling applications.
 
 
