@@ -1,4 +1,5 @@
-<h1><span style="color:red;">INTRODUCTION TO ROBOTICS</span></h1>
+<h1><span style="color:red; text-decoration:underline;">INTRODUCTION TO ROBOTICS</span></h1>
+
 This project addresses the limitations of manual assembly processes and the physical workload placed on operators by developing a robotic arm capable of handling components using a vacuum nozzle and fastening them with an integrated screwdriver tool. The proposed solution automates repetitive pick-and-place and screw-driving tasks to improve productivity, consistency, and safety in manufacturing environments.
 
 The main goal is to ensure reliable manipulation and fastening of parts of varying geometry and size. The robotic arm combines two tools — a vacuum nozzle for gripping components and a screwdriver head for secure fastening — both mounted on the same end-effector. This integrated configuration minimizes tool-change time, reduces cycle duration, and significantly increases the efficiency of the assembly workflow.
