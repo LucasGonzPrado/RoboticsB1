@@ -1,4 +1,9 @@
+This project presents the design and modeling of a 6-axis articulated robotic developed as a modular and lightweight platform for advanced manipulation tasks.
+The system features a fully mechanical structure optimized in CAD, with a kinematic configuration comparable to industrial manipulators used in precision automation.
+Each joint was modeled to ensure smooth motion transmission, adequate torque capacity, and structural rigidity under dynamic operation.
 
-This project presents the design and modeling of a 6-axis articulated robotic developed as a modular and lightweight platform for advanced manipulation tasks. The system features a fully mechanical structure optimized in CAD, with a kinematic configuration comparable to industrial manipulators used in precision automation. Each joint was modeled to ensure smooth motion transmission, adequate torque capacity, and structural rigidity under dynamic operation.
-The robot integrates a custom end-effector mounting interface, allowing rapid tool exchange depending on the application requirements. The mechanical design prioritizes manufacturability and stiffness-to-weight performance through topology-aware geometry and distributed mass balancing around the major rotation
-MATLAB was used for mathematical modeling, including forward and inverse kinematics, workspace characterization, and dynamic behavior estimation. These analyses support the validation of joint ranges, singularity avoidance, and the overall feasibility of the motion profiles expected during operation. The system’s 6-DoF configuration enables high maneuverability, making the platform suitable for trajectory planning, educational research, and controller developmen
+The robot integrates a custom end-effector mounting interface, allowing rapid tool exchange depending on the application requirements.
+The mechanical design prioritizes manufacturability and stiffness-to-weight performance through topology-aware geometry and distributed mass balancing around the major rotation.
+
+MATLAB was used for mathematical modeling, including forward and inverse kinematics, workspace characterization, and dynamic behavior estimation.
+These analyses support the validation of joint ranges, singularity avoidance, and the overall feasibility of the motion profiles expected during operation. The system’s 6-DoF configuration enables high maneuverability, making the platform suitable for trajectory planning, educational research, and controller development.
