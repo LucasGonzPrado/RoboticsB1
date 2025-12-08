@@ -1,0 +1,160 @@
+Integer Tokens
+Integer Blocks
+Double TokenHeight
+Double BlockHeight
+Integer TokenID
+Integer BlockID
+Function main
+Pallet 1, Pa1, Pa2, Pa3, 2, 3
+
+
+Motor On
+Power High
+Speed 100
+Accel 30, 30
+SpeedS 800
+AccelS 5100
+Tool 2
+
+
+Tokens = 3
+Blocks = 3
+TokenHeight = 6.0
+BlockHeight = 6.0
+
+
+
+
+Go Retract_Safe
+
+For TokenID = Tokens To 1 Step -1
+Go Retract_Safe
+
+	Pick_Infeed_Token()
+Go Retract_Safe
+
+	
+	Alignment_Token()
+Go Retract_Safe
+
+
+	Place_Tray_Token()
+	
+Next TokenID
+
+
+Go Retract_Safe
+
+
+For BlockID = Blocks To 1 Step -1
+Go Retract_Safe
+
+	Pick_Infeed_Block()
+Go Retract_Safe
+
+	
+	Alignment_Block()
+Go Retract_Safe
+
+
+	Place_Tray_Block()
+Next BlockID
+
+Go Retract_Safe
+
+Fend
+
+Function Pick_Infeed_Token
+	'Pick Token from Infeed
+	Print "Picking Token from Infeed. Token ID = ", Tokens
+	Go circle -Z(50 + TokenID * TokenHeight) +U(30)
+	Wait 1
+	On 8
+	Move circle -Z(TokenID * TokenHeight - 5) +U(30) CP
+	Wait 1
+	Move circle -Z(50 + TokenID * TokenHeight) +U(30) CP
+Fend
+
+Function Pick_Infeed_Block
+	'Pick Block from Infeed
+	Print "Picking block from Infeed. block ID = ", Blocks
+	Go Origin +X(24.2) +Y(40.75) -Z(50 + BlockID * BlockHeight) +U(30)
+	Wait 1
+	On 8
+	Move Origin +X(24.2) +Y(40.75) -Z(BlockID * BlockHeight - 5) +U(30) CP
+	Wait 1
+	Move Origin +X(24.2) +Y(40.75) -Z(50 + BlockID * BlockHeight) +U(30) CP
+	
+Fend
+
+Function Alignment_Token
+	'Alignment Token
+	Print "Aligning Token. Token ID = ", Tokens
+	Print "Aligning Block. Block ID = ", Blocks
+	Go allign -X(50) +Y(50) +Z(30)
+	Move maybe +Y(-2) +Z(-2) CP
+	Wait .5
+	Off 8
+	Wait 0.5
+	Move maybe +X(-5) +Y(0) +Z(2)
+	Wait 0.3
+	On 8
+	Move allign -X(50) +Y(50) +Z(30)
+	Wait 2
+	Move Allign +X(3.5)
+	Wait 2
+	
+	Move Allign -X(50) +Y(50) +Z(30)
+Fend
+
+
+Function Alignment_Block
+	'Alignment Block
+	Print "Aligning Block. Block ID = ", Blocks
+	Go Allign -X(50) +Y(50) +Z(30)
+    Move maybe +Y(-2) +Z(-2)
+	Wait 1
+	Off 8
+	Wait .5
+	Move maybe +X(-5) +Y(0) +Z(2)
+	Wait 0.3
+	On 8
+	Move allign -X(50) +Y(50) +Z(30)
+	Wait 1
+	Move allign +X(3.5) +Y(1) +Z(2)
+	Wait 1
+	Move Allign -X(4) +Y(2) +Z(3)
+		
+	Wait 1
+	
+	Move Allign -X(50) +Y(50) +Z(30)
+Fend
+
+Function Place_Tray_Token
+	'Tray Token
+	Print "Placing Token in Tray. Tray Position ID = ", Tokens
+	Pallet 1, Pa1, Pa2, Pa3, 2, 3
+	Integer Lol
+	
+	Go Pallet(1, (2 * TokenID)) +Z(30)
+	Wait 0.2
+    Move Pallet(1, (2 * TokenID)) CP
+	Off 8
+	Wait 0.2
+	Move Pallet(1, (2 * TokenID)) +Z(30) CP
+	Wait 0.2
+	
+	Fend
+
+Function Place_Tray_Block
+	'Tray Block
+	Print "Placing Block in Tray. Block Position ID = ", Blocks
+	Pallet 1, Pa1, Pa2, Pa3, 2, 3
+	Go Pallet(1, (2 * BlockID - 1)) +Z(30)
+	
+	Wait 0.2
+	Move Pallet(1, (2 * BlockID - 1)) CP
+	Off 8
+	Wait 0.2
+	Move Pallet(1, (2 * BlockID - 1)) +Z(30) CP
+	Fend
