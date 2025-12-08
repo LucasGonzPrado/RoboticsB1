@@ -1,0 +1,104 @@
+Integer Tokens2
+Integer Blocks2
+Integer items
+Double TokenHeight2
+Double BlockHeight2
+Integer TokenID2
+Integer BlockID2
+Integer itemid
+Function Task2
+
+
+Motor On
+Power High
+Speed 100
+Accel 30, 30
+SpeedS 800
+AccelS 5100
+Tool 2
+
+
+Tokens2 = 3
+Blocks2 = 3
+items = Tokens2 + Blocks2
+'24'
+TokenHeight2 = 6.0
+BlockHeight2 = 6.0
+
+
+
+
+Go Retract_Safe
+itemid = items
+blockid2 = Blocks2
+For TokenID2 = Tokens2 To 1 Step -1
+	Go Retract_Safe
+
+	Pick_Infeed_Token2()
+	Go Retract_Safe
+	
+	Alignment_Token()
+	Go Retract_Safe
+
+	Stack()
+
+	Go Retract_Safe
+
+	Pick_Infeed_Block2()
+	Go Retract_Safe
+	BlockID2 = BlockID2 - 1
+	
+	Alignment_Block()
+	Go Retract_Safe
+
+
+	Stack2()
+	itemid = itemid - 1
+	
+Next TokenID2
+
+
+Go Retract_Safe
+Fend
+Function Pick_Infeed_Token2
+	'Pick Token from Infeed'
+	Print "Picking Token from Infeed. Token ID = ", Tokens2
+	Go circle -Z(50 + TokenID2 * TokenHeight2) +U(30)
+	Wait 1
+	On 8
+	Move circle -Z(TokenID2 * TokenHeight2 - 5) +U(30) CP
+	Wait 1
+	Move circle -Z(50 + TokenID2 * TokenHeight2) +U(30) CP
+Fend
+
+Function Pick_Infeed_Block2
+	'Pick Block from Infeed
+	Print "Picking block from Infeed. block ID = ", Blocks2
+	Go Origin +X(24.2) +Y(40.75) -Z(50 + BlockID2 * BlockHeight2) +U(30)
+	Wait 1
+	On 8
+	Move Origin +X(24.2) +Y(40.75) -Z(BlockID2 * BlockHeight2 - 5) +U(30) CP
+	Wait 1
+	Move Origin +X(24.2) +Y(40.75) -Z(50 + BlockID2 * BlockHeight2) +U(30) CP
+	
+Fend
+Function Stack
+	Go Stackpoint +Z((items - itemid) * TokenHeight2 + 50)
+	Wait .5
+	Move Stackpoint +Z((items - itemid) * TokenHeight2 + 1) CP
+	Off 8
+	Wait .5
+	Move Stackpoint +Z((items - itemid) * TokenHeight2 + 50)
+	
+	
+Fend
+Function Stack2
+	Go Stackpoint +Z((items - (itemid - 1)) * TokenHeight2 + 50)
+	Wait .5
+	Move Stackpoint +Z((items - (itemid - 1)) * TokenHeight2 + 1) CP
+	Off 8
+	Wait .5
+	Move Stackpoint +Z((items - (itemid - 1)) * TokenHeight2 + 50)
+	Fend
+
+
