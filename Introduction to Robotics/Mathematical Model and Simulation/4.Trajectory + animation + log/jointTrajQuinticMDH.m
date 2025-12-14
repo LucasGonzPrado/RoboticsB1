@@ -1,0 +1,70 @@
+function [t, Q, Qd, Qdd] = jointTrajQuinticMDH(q0, qf, tf, dt)
+% JOINTTRAJQUINTICMDH  Quintic joint-space trajectory generator.
+%
+%   [t, Q, Qd, Qdd] = jointTrajQuinticMDH(q0, qf, tf, dt)
+%
+%   Inputs:
+%     q0 : n x 1 initial joint configuration
+%     qf : n x 1 final joint configuration
+%     tf : total motion time [s]
+%     dt : sampling time [s]
+%
+%   Outputs:
+%     t   : 1 x N time vector
+%     Q   : n x N joint positions
+%     Qd  : n x N joint velocities
+%     Qdd : n x N joint accelerations
+%
+%   Notes:
+%     - Quintic polynomial ensures zero velocity and acceleration
+%       at start and end of motion
+%     - Works for revolute (rad) and prismatic (m) joints
+
+    % Input shaping
+    q0 = q0(:);
+    qf = qf(:);
+
+    if numel(q0) ~= numel(qf)
+        error('q0 and qf must have the same length.');
+    end
+    if tf <= 0 || dt <= 0
+        error('tf and dt must be positive.');
+    end
+
+    n = numel(q0);
+
+    % Time vector
+    N = floor(tf/dt) + 1;
+    t = linspace(0, tf, N);
+
+    % Preallocate
+    Q   = zeros(n, N);
+    Qd  = zeros(n, N);
+    Qdd = zeros(n, N);
+
+    % Quintic trajectory per joint
+    for i = 1:n
+        dq = qf(i) - q0(i);
+
+        % Polynomial coefficients
+        a0 = q0(i);
+        a1 = 0;
+        a2 = 0;
+        a3 =  10*dq / tf^3;
+        a4 = -15*dq / tf^4;
+        a5 =   6*dq / tf^5;
+
+        % Powers of time
+        tt  = t;
+        tt2 = tt.^2;
+        tt3 = tt.^3;
+        tt4 = tt.^4;
+        tt5 = tt.^5;
+
+        % Position, velocity, acceleration
+        Q(i,:)   = a0 + a1*tt + a2*tt2 + a3*tt3 + a4*tt4 + a5*tt5;
+        Qd(i,:)  =        a1       + 2*a2*tt + 3*a3*tt2 + 4*a4*tt3 + 5*a5*tt4;
+        Qdd(i,:) =                  2*a2     + 6*a3*tt +12*a4*tt2 +20*a5*tt3;
+    end
+end
+
