@@ -1,0 +1,33 @@
+function [w, kappa] = manipulabilityMDH(MDH, q)
+% MANIPULABILITYMDH  Manipulability measures for an MDH robot.
+%
+%   [w, kappa] = manipulabilityMDH(MDH, q)
+%
+%   Outputs:
+%     w      : Yoshikawa manipulability index
+%     kappa : Jacobian condition number
+%
+%   Notes:
+%     - Based on the geometric Jacobian expressed in the base frame
+%     - w = 0 indicates a singular configuration
+%     - Large kappa indicates poor numerical conditioning
+
+    % Geometric Jacobian
+    J = jacobianMDH(MDH, q);
+
+    % Yoshikawa manipulability
+    JJt = J * J.';
+    if rank(JJt) < min(size(JJt))
+        w = 0;
+    else
+        w = sqrt(det(JJt));
+    end
+
+    % Condition number (via singular values)
+    s = svd(J);
+    if isempty(s) || min(s) < eps
+        kappa = Inf;
+    else
+        kappa = max(s) / min(s);
+    end
+end
