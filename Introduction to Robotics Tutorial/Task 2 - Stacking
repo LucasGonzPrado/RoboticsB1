@@ -18,10 +18,9 @@ AccelS 5100
 Tool 2
 
 
-Tokens2 = 3
-Blocks2 = 3
+Tokens2 = 10
+Blocks2 = 10
 items = Tokens2 + Blocks2
-'24'
 TokenHeight2 = 6.0
 BlockHeight2 = 6.0
 
@@ -37,8 +36,6 @@ For TokenID2 = Tokens2 To 1 Step -1
 	Pick_Infeed_Token2()
 	Go Retract_Safe
 	
-	Alignment_Token()
-	Go Retract_Safe
 
 	Stack()
 
@@ -53,7 +50,7 @@ For TokenID2 = Tokens2 To 1 Step -1
 
 
 	Stack2()
-	itemid = itemid - 1
+	itemid = itemid - 2
 	
 Next TokenID2
 
@@ -100,5 +97,3 @@ Function Stack2
 	Wait .5
 	Move Stackpoint +Z((items - (itemid - 1)) * TokenHeight2 + 50)
 	Fend
-
-
