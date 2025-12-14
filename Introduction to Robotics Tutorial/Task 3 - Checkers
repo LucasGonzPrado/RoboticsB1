@@ -1,0 +1,334 @@
+Integer white
+Integer blue
+Integer red
+Integer orange
+Integer green
+Integer Pointing(8, 8)
+Integer Pointer_C ' what column is the robot looking at?' 
+Integer Pointer_R ' what row is the robot looking at'
+Integer Pointer_CN
+Integer Pointer_RN
+Integer Pointer_CC
+Integer Pointer_RC
+Integer bucle
+Integer bucle2
+Integer big_bucle
+
+Integer index
+Integer indexest
+Integer checker
+Integer checker_C
+Integer a
+Integer b
+Integer c
+Function main
+
+Motor On
+Power High
+Speed 100
+Accel 30, 30
+SpeedS 800
+AccelS 5100
+
+white = 14
+blue = 15
+red = 1
+orange = 2
+green = 3
+Tool 3
+Pallet 0, Pa1, Pa2, Pa3, 8, 8 'pallet of the board, notated as columns x rows'
+'set initial pointing positions for robot'
+
+'defining allies'
+For indexest = 1 To 3 Step 1
+	checker = indexest Mod 2
+	If checker = 0 Then
+		For index = 2 To 8 Step +2
+			Pointing(index, indexest) = 1
+		Next index
+	Else
+		For index = 1 To 7 Step +2
+			Pointing(index, indexest) = 1
+		Next index
+EndIf
+Next indexest
+'defining enemies'
+For indexest = 6 To 8 Step 1
+	checker = indexest Mod 2
+	If checker = 0 Then
+		For index = 2 To 8 Step +2
+			Pointing(index, indexest) = 2
+		Next index
+	Else
+		For index = 1 To 7 Step +2
+			Pointing(index, indexest) = 2
+		Next index
+EndIf
+Next indexest
+'defining empty squares'
+For indexest = 1 To 8 Step 1
+	For index = 1 To 8 Step 1
+		If Pointing(index, indexest) <> 1 And Pointing(index, indexest) <> 2 Then
+			Pointing(index, indexest) = 0
+		EndIf
+	Next index
+Next indexest
+big_bucle = 1
+Do While big_bucle = 1
+	bucle2 = 1
+	
+    Do While bucle2 = 1
+		Print("input board changes, if there are not any, let a position be 0")
+		Print("enter the column number:")
+		Input a
+		Print("enter the row number:")
+		Input b
+		Print("enter the new value of the position")
+		Input c
+		If c = 1 Or c = 2 Or c = 0 Then
+			If a <> 0 And b <> 0 Then
+				Pointing(a, b) = c
+			Else
+				bucle2 = 0
+				Print("no changes made")
+			EndIf
+		Else
+			Print("invalid value")
+		EndIf
+	Loop
+	bucle = 1
+	Do While bucle = 1
+		Pointer_C = 1
+		Pointer_R = 1
+		Pointer_CN = Pointer_C
+		Pointer_RN = Pointer_R
+	    Go Pallet(0, Pointer_C, Pointer_R) +Z(50)
+	
+		
+		
+		'Choose the piece to make an action'
+		
+			Choosing_Piece()
+			
+			
+		'MOVE MODE'	
+		If Sw(red) = On And Sw(orange) = Off Then
+			If Pointing(Pointer_C, Pointer_R) = 1 Or Pointing(Pointer_C, Pointer_R) = 3 Then
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(5)
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+				Print("You chose this piece, now choose where to move it")
+				
+				
+				Choosing_Movement
+				
+				If Pointer_CN <> Pointer_C Then
+					Print("Moving the piece to the chosen location")
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+				On 8
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(5)
+				Wait 0.5
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+				Move Pallet(0, Pointer_CN, Pointer_RN) +Z(50)
+				Move Pallet(0, Pointer_CN, Pointer_RN) +Z(5)
+				Wait .5
+				Off 8
+				Move Pallet(0, Pointer_CN, Pointer_RN) +Z(50)
+				'Update on the board'
+				Pointing(Pointer_C, Pointer_R) = 0
+				Pointer_C = Pointer_CN
+				Pointer_R = Pointer_RN
+				Pointing(Pointer_C, Pointer_R) = 1
+				bucle = 0
+				EndIf
+				
+			
+				
+				
+			ElseIf Pointing(Pointer_C, Pointer_R) = 0 Then
+				Print("this square is empty, please leave move mode")
+                
+				Do While Sw(red) = On
+								Wait .5
+				Loop
+				
+			ElseIf Pointing(Pointer_C, Pointer_R) = 2 Or Pointing(Pointer_C, Pointer_R) = 4 Then
+				Print("This is an enemy piece, please leave move mode")
+                
+				Do While Sw(red) = On
+								Wait .5
+				Loop
+			EndIf
+			
+		EndIf
+		
+		'CAPTURE MODE'
+		If Sw(orange) = On And Sw(red) = Off Then
+	
+			Print("'capture mode!")
+			
+			If Pointing(Pointer_C, Pointer_R) = 1 Or Pointing(Pointer_C, Pointer_R) = 3 Then
+					Move Pallet(0, Pointer_C, Pointer_R) +Z(5)
+					Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+					Print("You chose this piece, now choose its capture")
+					checker_C = 1
+					
+					Do While checker_C = 1
+						Choosing_Capture
+						If Pointer_CN <> Pointer_C And Pointer_RN <> Pointer_R Then
+							Move Pallet(0, Pointer_CC, Pointer_RC) +Z(50)
+							On 8
+							Move Pallet(0, Pointer_CC, Pointer_RC) +Z(5)
+							Wait 1
+							Move Pallet(0, Pointer_CC, Pointer_RC) +Z(50)
+							Go dumping
+							Wait .5
+							Off 8
+							Go Pallet(0, Pointer_C, Pointer_R) +Z(50)
+							On 8
+							Move Pallet(0, Pointer_C, Pointer_R) +Z(5)
+							Wait 1
+							Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+							Move Pallet(0, Pointer_CN, Pointer_RN) +Z(50)
+							Move Pallet(0, Pointer_CN, Pointer_RN) +Z(5)
+							Wait 1
+							Off 8
+							Move Pallet(0, Pointer_CN, Pointer_RN) +Z(50)
+							Print("piece captured")
+							Pointing(Pointer_CC, Pointer_RC) = 0
+							Pointing(Pointer_CN, Pointer_RN) = 1
+							Pointing(Pointer_C, Pointer_R) = 0
+							Pointer_C = Pointer_CN
+							Pointer_R = Pointer_RN
+							checker_C = 1
+						Else
+							Print("Capture cancelled, please leave capture mode")
+							checker_C = 0
+                            
+							Do While Sw(orange) = On
+								Wait .5
+							Loop
+							bucle = 0
+						EndIf
+					Loop
+	
+			ElseIf Pointing(Pointer_C, Pointer_R) = 0 Then
+				Print("this square is empty, please leave capture mode")
+                
+				Do While Sw(orange) = On
+								Wait .5
+				Loop
+			
+			ElseIf Pointing(Pointer_C, Pointer_R) = 2 Or Pointing(Pointer_C, Pointer_R) = 4 Then
+				Print("This is an enemy piece, please leave capture mode")
+				
+				Do While Sw(orange) = On
+					Wait .5
+				Loop
+			EndIf
+		EndIf
+	
+	Loop
+Loop
+Fend
+Function Choosing_Piece
+	Do While Sw(red) = Off And Sw(orange) = Off
+		'Horizontal Movement'
+		If Sw(white) = On Then
+			If Pointer_C < 8 Then
+				Move Pallet(0, Pointer_C + 1, Pointer_R) +Z(50)
+				Pointer_C = Pointer_C + 1
+			
+			ElseIf Pointer_C = 8 Then
+				Move Pallet(0, 1, Pointer_R) +Z(50)
+				Pointer_C = 1
+			EndIf
+		EndIf
+		'Vertical Movement'
+		If Sw(blue) = On Then
+			If Pointer_R < 8 Then
+				Move Pallet(0, Pointer_C, Pointer_R + 1) +Z(50)
+				Pointer_R = Pointer_R + 1
+			
+			ElseIf Pointer_R = 8 Then
+				Move Pallet(0, Pointer_C, 1) +Z(50)
+				Pointer_R = 1
+			EndIf
+		EndIf
+
+		
+		
+	Loop
+Fend
+Function Choosing_Movement
+	Do While Sw(red) = On
+				'Right diagonal choosing'
+	If Sw(white) = On Then
+	
+		If Pointer_C = 8 Or Pointing(Pointer_C + 1, Pointer_R + 1) <> 0 Then
+			Print("movement not allowed")
+			Wait 1
+		Else
+			Move Pallet(0, Pointer_C + 1, Pointer_R + 1) +Z(50)
+			Pointer_CN = Pointer_C + 1
+			Pointer_RN = Pointer_R + 1
+		EndIf
+	EndIf
+	
+	'Left Diagonal choosing'
+	If Sw(blue) = On Then
+		If Pointer_C = 1 Or Pointing(Pointer_C - 1, Pointer_R + 1) <> 0 Then
+			Print("movement not allowed")
+			Wait 1
+		Else
+			Move Pallet(0, Pointer_C - 1, Pointer_R + 1) +Z(50)
+			Pointer_CN = Pointer_C - 1
+			Pointer_RN = Pointer_R + 1
+		EndIf
+	EndIf
+			Loop
+	
+Fend
+Function Choosing_Capture
+	Do While Sw(orange) = On
+'Right diagonal choosing'
+		If Sw(white) = On Then
+			If Pointer_CN = Pointer_C + 2 Then
+			Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+			Pointer_CN = Pointer_C
+			Pointer_RN = Pointer_R
+			ElseIf Pointing(Pointer_C + 1, Pointer_R + 1) = 2 And Pointing(Pointer_C + 2, Pointer_R + 2) = 0 Then
+				Move Pallet(0, Pointer_C + 2, Pointer_R + 2) +Z(50)
+				Pointer_CN = Pointer_C + 2
+				Pointer_RN = Pointer_R + 2
+				Pointer_CC = Pointer_C + 1
+				Pointer_RC = Pointer_R + 1
+			Else
+				Print("movement not allowed")
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+				Pointer_CN = Pointer_C
+				Pointer_RN = Pointer_R
+			EndIf
+		EndIf
+			
+		'Left Diagonal choosing'
+		If Sw(blue) = On Then
+			If Pointer_CN = Pointer_C - 2 Then
+				Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+				Pointer_CN = Pointer_C
+				Pointer_RN = Pointer_R
+				ElseIf Pointing(Pointer_C - 1, Pointer_R + 1) = 2 And Pointing(Pointer_C - 2, Pointer_R + 2) = 0 Then
+					Move Pallet(0, Pointer_C - 2, Pointer_R + 2) +Z(50)
+					Pointer_CN = Pointer_C - 2
+					Pointer_RN = Pointer_R + 2
+					Pointer_CC = Pointer_C - 1
+					Pointer_RC = Pointer_R + 1
+				Else
+					Print("movement not allowed")
+					Move Pallet(0, Pointer_C, Pointer_R) +Z(50)
+					Pointer_CN = Pointer_C
+					Pointer_RN = Pointer_R
+			EndIf
+		EndIf
+	Loop
+Fend
+
