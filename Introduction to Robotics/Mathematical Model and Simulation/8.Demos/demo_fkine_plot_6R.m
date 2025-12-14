@@ -1,0 +1,25 @@
+clear; clc; close all;
+
+% Add toolbox folders to path
+startup_MDH;   % or startup_MDH();
+
+% Load the 6R MDH robot
+[MDH, qmin, qmax] = getMDH_6R();
+
+% Test configuration (rad)
+q = [0.3; -0.6; 0.4; 0.2; -0.3; 0.1];
+
+if any(q < qmin) || any(q > qmax)
+    warning('Selected q is outside the defined joint limits.');
+end
+
+% Forward kinematics
+[~, T_all] = fkineMDH_all(MDH, q);
+T06 = T_all(:,:,end);
+
+disp("T_0^6 = ");
+disp(T06);
+
+% Plot robot and frames
+plotRobotMDH(MDH, q, true, 0.1);
+title('Demo: FK + Robot Plot (6R MDH)');
