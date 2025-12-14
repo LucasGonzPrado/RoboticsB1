@@ -1,90 +1,146 @@
 # Mathematical Model for 6-DOF Robotic Arm Kinematics and Simulation
 
-This section presents the mathematical modeling, simulation, and analysis of a **6-DOF articulated robotic arm**, developed using the **Modified Denavit–Hartenberg (MDH)** convention and validated through MATLAB-based simulations. The model incorporates geometric offsets derived from the CAD design to better represent the physical robot.
+This section presents the kinematic and dynamic modeling, simulation, and analysis of a **6-DOF articulated robotic arm**.  
+The robot is modeled using the **Modified Denavit–Hartenberg (MDH)** convention and validated through MATLAB-based simulations.  
+Geometric offsets derived from the CAD model are incorporated to accurately represent the physical robot.
 
 ---
 
-## Key Functions
+## 1. Forward Kinematics (MDH Model)
 
-1. **Forward Kinematics**:
-   - Computes the full pose (position and orientation) of the end-effector based on the six joint variables.
-   - Uses an MDH-based formulation aligned with the robot’s real geometry.
-   - Enables verification of robot configurations for given joint positions.
+Forward kinematics defines the geometric structure of the robot and computes the pose of the end-effector from the joint variables.
 
-   ---<img width="723" height="723" alt="Home Position Frames" src="https://github.com/user-attachments/assets/b1dbb41b-1f27-4e84-bf1b-6be76e3216fc" />
+- The robot is modeled using the **MDH convention**.
+- Coordinate frames are assigned to each joint.
+- Fixed offsets from the CAD design are included.
+- The resulting kinematic model matches the real mechanical configuration.
 
-
-2. **Inverse Kinematics**:
-   - Determines valid joint configurations that achieve a desired end-effector pose.
-   - Allows task-level planning where the target position is known while joint angles are unknown.
-   - Ensures consistency with joint limits and reachable configurations.
+![Kinematic Diagram](https://github.com/user-attachments/assets/391dd07a-20de-4128-8b0d-89c7e2d3ad51)
+![Robot](https://github.com/user-attachments/assets/8952656a-d594-46d9-bea5-242ee4803029)
 
 ---
 
-3. **Trajectory Planning**:
-   - Generates smooth joint-space trajectories between initial and target configurations.
-   - Uses time-parameterized motion to ensure continuous and physically feasible movements.
-   - Visualizes both joint evolution and Cartesian end-effector motion.
+## 2. Inverse Kinematics
 
-   ![End Effector Trajectory](images/End_Effector_Trajectory.png)
+Inverse kinematics determines joint configurations that achieve a desired end-effector pose.
 
----
+- Enables task-level planning in Cartesian space.
+- Ensures solutions respect joint limits.
+- Provides valid joint configurations for trajectory execution.
 
-4. **Jacobian Matrix and Singularity Analysis**:
-   - Computes the Jacobian matrix to relate joint velocities to end-effector linear and angular velocities.
-   - Evaluates singular configurations using a scalar index (σ).
-   - Identifies regions of poor kinematic performance within the workspace.
+![Ik](https://github.com/user-attachments/assets/bc2c59f7-ba4c-4401-a708-54a417a82d90)
 
-   ![Workspace Singularity Map](images/Workspace_Singularity_Map.png)
 
 ---
 
-5. **Workspace Generation**:
-   - Approximates the reachable workspace by sampling joint configurations within defined limits.
-   - Provides a 3D visualization of the end-effector reachability.
-   - Highlights regions with higher density of reachable poses.
+## 3. Trajectory Planning
 
-   ![Workspace](images/Approximate_End_Effector_Workspace.png)
+A smooth trajectory is generated between an initial and a target configuration.
 
----
+- Joint-space trajectories are time-parameterized.
+- The resulting Cartesian motion is smooth and continuous.
+- Start and end points are clearly defined.
 
-6. **Manipulability Analysis**:
-   - Computes the Yoshikawa manipulability index along a defined trajectory.
-   - Visualizes how dexterity changes throughout the robot motion.
-   - Helps identify optimal regions for task execution.
-
-   ![Manipulability Animation](images/Robot_Animation_Colored_by_Manipulability.png)
+![End - Effector Trajectory](https://github.com/user-attachments/assets/52a26c5d-f184-4ddf-88d8-cda45eae0156)
 
 ---
 
-7. **Dynamic Gravity Torque Evaluation**:
-   - Calculates gravity-induced joint torques along the planned trajectory.
-   - Evaluates the effect of payload on each joint.
-   - Provides insight into actuator sizing and mechanical stress distribution.
+## 4. Jacobian Matrix and Singularity Analysis
 
-   ![Joint Torques](images/Joint_Gravity_Torques.png)
+The Jacobian matrix is computed to analyze velocity transmission and detect singular configurations.
+
+- Relates joint velocities to end-effector linear and angular velocities.
+- A scalar singularity index (σ) is evaluated.
+- Regions with poor kinematic performance are identified.
+- Color variation indicates proximity to singularities.
+
+![Jacobian Matrix](https://github.com/user-attachments/assets/54acbdf2-da35-4db5-aae4-b6b43925e89b)
+
+---
+
+## 5. Workspace Generation
+
+The reachable workspace of the robot is approximated by sampling joint configurations within their limits.
+
+- Displays the volume reachable by the end-effector.
+- Represents reachability independent of motion quality.
+- Used to validate physical reach of the robot.
+
+![93f65750-6879-42c5-9fbd-0d4c458362b2](https://github.com/user-attachments/assets/26f36799-1987-4e41-b425-dd8e63f62847)
+
+
+---
+
+## 6. Manipulability Analysis
+
+The Yoshikawa manipulability index is evaluated along a planned trajectory.
+
+- Quantifies the robot’s dexterity during motion.
+- Highlights regions of good and poor manipulability.
+- Helps identify optimal regions for task execution.
+
+![Robot Animation Colored By Manipulability](https://github.com/user-attachments/assets/e51f0377-77e3-4a8b-8774-52e4afa136d9)
+
+---
+
+## 7. Joint Motion Profiles
+
+Joint motion profiles are analyzed to ensure smooth and feasible motion.
+
+- Joint positions, velocities, and accelerations are plotted over time.
+- Confirms continuity and absence of abrupt changes.
+- Validates trajectory feasibility for real actuators.
+
+![Joint motion Profiles](https://github.com/user-attachments/assets/c188c240-b8e9-4cc3-86b4-50c458d580b1)
+---
+
+## 8. Dynamic Gravity Torque Evaluation
+
+Gravity-induced torques are computed along the planned trajectory considering payload effects.
+
+- Evaluates torque requirements for each joint.
+- Identifies the most mechanically demanding joints.
+- Useful for actuator selection and mechanical validation.
+
+![Joint gravity torque along trayectory](https://github.com/user-attachments/assets/bc9ed4f8-0f4f-4485-beaf-59aba4b6a864)
+
+---
+
+## 9. Robot Animation (MDH)
+
+A full 3D animation of the robot motion is generated using the MDH kinematic model.
+
+- Confirms consistency between mathematical model and visualization.
+- Displays coordinated motion of all six joints.
+- Serves as a final validation of the simulation pipeline.
+
+![Robot Animation](https://github.com/user-attachments/assets/48db4d3d-3364-49aa-8e33-085b7035b7f2)
 
 ---
 
 ## Applications
 
-- **Robotics Education**:
-  - Interactive understanding of advanced kinematic concepts for serial manipulators.
-- **Simulation and Validation**:
-  - Validate robot motion, workspace, and feasibility before physical implementation.
-- **Trajectory and Motion Planning**:
-  - Design smooth, singularity-aware trajectories for real-world tasks.
-- **Performance Evaluation**:
-  - Analyze workspace quality, manipulability, and joint loading.
+- **Robotics Education**  
+  Visualization and understanding of advanced kinematic and dynamic concepts.
+
+- **Simulation and Validation**  
+  Verification of motion feasibility before physical implementation.
+
+- **Trajectory and Motion Planning**  
+  Design of smooth, singularity-aware trajectories.
+
+- **Performance Evaluation**  
+  Analysis of workspace quality, manipulability, and joint loading.
 
 ---
 
-## Visualizations Provided
+## Summary of Visualizations
 
-- **Robot Configuration**: 3D visualization of the robot using an MDH stick model aligned with CAD offsets.
-- **End-Effector Trajectory**: Smooth Cartesian paths traced during motion execution.
-- **Workspace and Singularity Maps**: Spatial visualization of reachability and kinematic performance.
-- **Joint Profiles**: Time evolution of joint positions and gravity torques.
-- **Robot Animation**: Dynamic visualization of robot motion in 3D space.
+- MDH-based robot model with CAD offsets  
+- End-effector trajectories in Cartesian space  
+- Workspace and singularity maps  
+- Manipulability evaluation  
+- Joint position, velocity, acceleration, and torque profiles  
+- Full robot animation
 
-![Robot Animation](images/Robot_Animation_MDH.png)
+
