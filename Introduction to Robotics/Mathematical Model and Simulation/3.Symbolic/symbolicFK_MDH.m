@@ -1,0 +1,55 @@
+function [T_sym, T_each, q] = symbolicFK_MDH(MDH)
+% SYMBOLICFK_MDH  Symbolic forward kinematics using MDH convention.
+%
+%   [T_sym, T_each, q] = symbolicFK_MDH(MDH)
+%
+%   Input:
+%     MDH : n x 5 numeric MDH table
+%           MDH(i,:) = [theta0_i d_i a_{i-1} alpha_{i-1} type_i]
+%
+%   Outputs:
+%     q      : n x 1 symbolic joint variable vector
+%     T_sym  : 4 x 4 symbolic homogeneous transform ^0T_n(q)
+%     T_each : 4 x 4 x n symbolic transforms ^0T_i(q)
+%
+%   Notes:
+%     - Uses Craig's Modified DH convention
+%     - Supports revolute and prismatic joints
+%     - Fully consistent with fkineMDH_all.m
+
+    if ~isnumeric(MDH)
+        error('MDH table must be numeric.');
+    end
+
+    n = size(MDH,1);
+
+    % Symbolic joint variables
+    syms q [n 1] real
+
+    % Initialize transforms
+    T = sym(eye(4));
+    T_each = sym(zeros(4,4,n));
+
+    % Build symbolic FK
+    for i = 1:n
+        theta0 = MDH(i,1);
+        d0     = MDH(i,2);
+        a      = MDH(i,3);
+        alpha  = MDH(i,4);
+        type   = MDH(i,5);
+
+        if type == 0      % revolute
+            theta = theta0 + q(i);
+            d     = d0;
+        else              % prismatic
+            theta = theta0;
+            d     = d0 + q(i);
+        end
+
+        A = MDH_sym_A(theta, d, a, alpha);
+        T = T * A;
+        T_each(:,:,i) = T;
+    end
+
+    T_sym = simplify(T);
+end
