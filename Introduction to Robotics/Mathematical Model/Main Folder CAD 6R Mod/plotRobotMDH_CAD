@@ -1,0 +1,121 @@
+function plotRobotMDH_CAD(MDH, q, T_12_fixed, showFrames, frameScale)
+% PLOTROBOTMDH_CAD  Plot robot stick figure, inserting a fixed CAD offset
+% between frames {1} and {2} (i.e., between joint 1 and joint 2).
+%
+%   plotRobotMDH_CAD(MDH, q, T_12_fixed)
+%   plotRobotMDH_CAD(MDH, q, T_12_fixed, showFrames, frameScale)
+%
+% Inputs:
+%   MDH        : n x 5 table [theta0 d a alpha type] (Craig MDH)
+%   q          : n x 1 joint variables
+%   T_12_fixed : 4 x 4 fixed transform applied AFTER {1} and BEFORE {2}
+%                Example: transl(dx12,0,dz12) in frame {1}
+%   showFrames : true/false (default false)
+%   frameScale : axis length for frames (default 0.08)
+%
+% Notes:
+%   - This affects ONLY visualization (and optionally frame drawing).
+%   - Your FK/Jacobian/IK functions remain unchanged.
+%   - Indices assume joints are {1..n}. The fixed offset is inserted between
+%     joint-1 and joint-2 (after MDH row 1, before row 2).
+
+    if nargin < 4, showFrames = false; end
+    if nargin < 5, frameScale = 0.08; end
+
+    n = size(MDH,1);
+    q = q(:);
+    if numel(q) ~= n
+        error('q must have length n = size(MDH,1).');
+    end
+    if ~isequal(size(T_12_fixed), [4 4])
+        error('T_12_fixed must be 4x4.');
+    end
+
+    % Standard MDH forward kinematics (your existing function)
+    [~, T_all] = fkineMDH_all(MDH, q);
+
+    % Build CAD-corrected joint origins:
+    % P(:,1) = base origin
+    % P(:,2) = origin of {1}
+    % P(:,3) = origin of {2} after inserting fixed offset
+    % P(:,k) = origin of {k-1} (CAD-corrected chain onward)
+    P = zeros(3, n+1);
+    P(:,1) = [0;0;0];
+
+    % origin of frame {1} from standard FK
+    T1 = T_all(:,:,1);
+    P(:,2) = T1(1:3,4);
+
+    % Now propagate transforms, inserting T_12_fixed between {1} and {2}
+    Tprev = T1;
+
+    % Apply fixed transform before joint 2
+    Tprev = Tprev * T_12_fixed;
+
+    % For i = 2..n, multiply by the MDH relative transform from row i
+    for i = 2:n
+        A_i = relativeMDH_A(MDH(i,:), q(i));   % T_{i-1}^i for row i
+        Tprev = Tprev * A_i;                   % now equals CAD-corrected T0^i
+        P(:,i+1) = Tprev(1:3,4);
+    end
+
+    % Plot
+    figure; hold on; grid on; view(3);
+    plot3(P(1,:), P(2,:), P(3,:), '-o', 'LineWidth', 2, 'MarkerSize', 6);
+    xlabel('X'); ylabel('Y'); zlabel('Z');
+    axis equal;
+    title('Robot (MDH stick figure + CAD fixed offset between {1} and {2})');
+
+    % Optional: plot frames (base, {1}, then CAD-corrected {2..n})
+    if showFrames
+        if exist('trplot','file') ~= 2
+            warning('trplot not found; frames will not be drawn.');
+            return;
+        end
+
+        trplot(eye(4), 'frame','0', 'length', frameScale);
+
+        % Standard frame {1}
+        trplot(T1, 'frame','1', 'length', frameScale);
+
+        % CAD-corrected frames {2..n}
+        Tprev = T1 * T_12_fixed;
+        trplot(Tprev, 'frame','1f', 'length', frameScale); % fixed-offset frame (optional label)
+
+        for i = 2:n
+            A_i = relativeMDH_A(MDH(i,:), q(i));
+            Tprev = Tprev * A_i;
+            trplot(Tprev, 'frame', num2str(i), 'length', frameScale);
+        end
+    end
+end
+
+% -------------------------------------------------------------------------
+function A = relativeMDH_A(row, qi)
+% RELATIVEMDH_A  Build Craig MDH relative transform for a single row.
+% row = [theta0 d a alpha type]
+% qi  = joint variable for this row
+
+    theta0 = row(1);
+    d0     = row(2);
+    a      = row(3);
+    alpha  = row(4);
+    type   = row(5);
+
+    if type == 0      % revolute
+        theta = theta0 + qi;
+        d     = d0;
+    else              % prismatic
+        theta = theta0;
+        d     = d0 + qi;
+    end
+
+    cth = cos(theta);  sth = sin(theta);
+    cal = cos(alpha);  sal = sin(alpha);
+
+    % Same A matrix as fkineMDH_all (Craig MDH)
+    A = [ cth,       -sth,        0,      a;
+          sth*cal,   cth*cal,    -sal,   -d*sal;
+          sth*sal,   cth*sal,     cal,    d*cal;
+          0,         0,           0,      1      ];
+end
