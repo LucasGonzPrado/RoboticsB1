@@ -1,0 +1,25 @@
+function tau_g = staticTorqueGravity(robotDyn, q, gvec)
+% STATICTORQUEGRAVITY  Joint torques due to gravity only.
+%
+% tau_g = staticTorqueGravity(robotDyn, q, gvec)
+%
+% q    : n x 1 (rad)
+% gvec : 1x3 gravity vector, default [0 0 -9.81]
+
+    if nargin < 3
+        gvec = [0 0 -9.81];
+    end
+
+    q = q(:).';  % row vector for SerialLink
+
+    % Two equivalent options:
+    % 1) Use gravload (if available)
+    if ismethod(robotDyn, 'gravload')
+        tau_g = robotDyn.gravload(q, gvec).';  % return as column
+    else
+        % 2) Use RNE with zero velocities/accelerations
+        qd  = zeros(size(q));
+        qdd = zeros(size(q));
+        tau_g = robotDyn.rne(q, qd, qdd, gvec).';
+    end
+end
