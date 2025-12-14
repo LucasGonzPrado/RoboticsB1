@@ -38,12 +38,78 @@
 1. **Navigate to the base:** The robot transports the item to the stacking base through a pre-established reference point.  
 2. **Alternate stacking:** Blocks and tokens are placed one after another, forming a tower with alternating elements.
 
-## Components 🕹️🔧  
+## Components  
 - 1 Feeder  
 - 1 Base  
 - 10 Tokens  
 - 10 Blocks  
 
+# Task 3 – Checkers  
+<img width="686" height="853" alt="Screenshot 2025-12-14 175033" src="https://github.com/user-attachments/assets/aedd50c7-248b-4db1-9b0e-f909af647b6b" />
 
+## Objective   
+Enable a user to play a checkers game against the robot using physical buttons, without directly touching the board or the pieces.
 
+---
+
+## Button-Based Control System — Checkers Game Robot
+
+The robot control system uses a set of physical buttons to interact with and control the robot during the execution of a checkers game. These buttons allow the operator to select pieces, choose movement directions, and control the game flow in a simple and intuitive way. Each button is assigned a specific function to ensure smooth gameplay and accurate robot motion.
+
+---
+
+### 🔘 Button Functions
+
+- 🟢 **Green Push Button**  
+  Confirms the current selection and executes the selected action. This button validates the chosen move or capture and commands the robot to perform the operation on the board.
+
+- 🔵 **Blue Push Button**  
+  Moves the selection vertically when navigating the board. When a movement mode is active, this button commands the robot to move the selected piece along the left diagonal direction.
+
+- ⚪ **White Push Button**  
+  Moves the selection horizontally when navigating the board. When a movement mode is active, this button commands the robot to move the selected piece along the right diagonal direction.
+
+- 🔴 **Red Push Button**  
+  Activates **Move Mode**, allowing the robot to perform a standard diagonal movement with the selected checker piece.
+
+- 🟠 **Orange Push Button**  
+  Activates **Capture Mode**, enabling the robot to execute a capture by jumping over an opponent’s piece according to checkers rules.
+
+---
+
+###  Task Flow
+
+1. **Select a piece:**  
+   The user navigates across the board using the blue and white buttons to select a checker piece.
+
+2. **Choose the operation mode:**  
+   The user selects either *Move Mode* or *Capture Mode* depending on the intended action.
+
+3. **Select movement direction:**  
+   The movement direction is defined using the navigation buttons according to the active mode.
+
+4. **Confirm action:**  
+   The green button is pressed to confirm the selection and trigger the robot motion.
+
+5. **Execute movement:**  
+   The robot performs the selected move or capture accurately on the checkers board.
+
+---
+
+###  Modes of Operation
+
+- **Move Mode:** Standard diagonal movement of a checker piece  
+- **Capture Mode:** Jumping over and capturing an opponent’s piece  
+
+---
+
+## Components 
+
+- 1 Six-axis robotic arm  
+- 1 Checkers board  
+- Checkers pieces (black and white)  
+- Physical button-based HMI  
+- Control electronics and wiring  
+
+---
 
