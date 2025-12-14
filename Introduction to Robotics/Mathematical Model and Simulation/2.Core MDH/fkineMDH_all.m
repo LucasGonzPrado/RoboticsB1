@@ -1,0 +1,59 @@
+function [A_all, T_all] = fkineMDH_all(MDH, q, T_fixed)
+% FKINEMDH_ALL  Forward kinematics using Modified DH convention (Craig),
+% with optional fixed CAD transforms.
+%
+%   [A_all, T_all] = fkineMDH_all(MDH, q)
+%   [A_all, T_all] = fkineMDH_all(MDH, q, T_fixed)
+%
+%   T_fixed.after : index i after which to insert fixed transform
+%   T_fixed.T     : 4x4 homogeneous fixed transform
+
+    % Number of joints
+    n = size(MDH,1);
+
+    if numel(q) ~= n
+        error('Length of q must equal number of MDH rows.');
+    end
+    q = q(:);
+
+    A_all = zeros(4,4,n);
+    T_all = zeros(4,4,n);
+
+    T = eye(4);
+
+    useFixed = (nargin == 3) && ~isempty(T_fixed);
+
+    for i = 1:n
+        theta0 = MDH(i,1);
+        d0     = MDH(i,2);
+        a      = MDH(i,3);
+        alpha  = MDH(i,4);
+        type   = MDH(i,5);
+
+        if type == 0      % revolute
+            theta = theta0 + q(i);
+            d     = d0;
+        else              % prismatic
+            theta = theta0;
+            d     = d0 + q(i);
+        end
+
+        cth = cos(theta);  sth = sin(theta);
+        cal = cos(alpha);  sal = sin(alpha);
+
+        A = [ cth,       -sth,        0,      a;
+              sth*cal,   cth*cal,    -sal,   -d*sal;
+              sth*sal,   cth*sal,     cal,    d*cal;
+              0,         0,           0,      1 ];
+
+        A_all(:,:,i) = A;
+        T = T * A;
+
+        % 🔒 INSERT FIXED CAD TRANSFORM (rigid link)
+        if useFixed && i == T_fixed.after
+            T = T * T_fixed.T;
+        end
+
+        T_all(:,:,i) = T;
+    end
+end
