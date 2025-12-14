@@ -1,0 +1,13 @@
+clear; clc; close all;
+
+% Add toolbox folders to MATLAB path
+startup_MDH;   % or startup_MDH();
+
+% Load the 6R MDH robot
+[MDH, qmin, qmax] = getMDH_6R();
+
+% Workspace visualization (random joint sampling)
+workspaceMDH(MDH, qmin, qmax, 3000);
+
+% Workspace colored by manipulability
+manipulabilityWorkspaceMDH(MDH, qmin, qmax, 2000);
